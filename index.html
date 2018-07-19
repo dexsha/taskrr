@@ -1,34 +1,47 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>taskrr</title>
+		<title>taskrr</title>	
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="icon" type="image/ico" href="images/favico.ico"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	</head>
 	<body>
 
-		<h2>Taskrr</h2>
-		<div>
-			<button onclick="handlers.toggleAll()">Toggle All</button>
-		</div>
-		
-		<div>
-			<input type="text" id="addTodoText">
-			<button onclick="handlers.addTodo()">Add</button>
-		</div>
+		<div id="wrapper">
+			<div class="container">
+				<section id="sidebar">
+					<a href="index.html" id="logo">taskrr</a>
+				</section>
 
-		<div>
-			<input type="number" id="editPosition" placeholder="ID">
-			<input type="text" id="editTodoText" placeholder="New value">
-			<button onclick="handlers.editTodo()">Edit</button>
-		</div>
+				<section id="taskrr">
+					<div class="input">
+						<input type="text" id="addTodoText">
+						<button onclick="handlers.addTodo()">Add</button>
+					</div>
 
-		<div>
-			<input type="number" id="togglePosition" placeholder="ID">
-			<button onclick="handlers.toggleTodo()">Toggle</button>
-		</div>
+					<div class="input">
+						<input type="number" id="editPosition" placeholder="ID">
+						<input type="text" id="editTodoText" placeholder="New value">
+						<button onclick="handlers.editTodo()">Edit</button>
+					</div>
 
-		<div>
-			<ul>
-			</ul>
+					<div class="input">
+						<input type="number" id="togglePosition" placeholder="ID">
+						<button onclick="handlers.toggleTodo()">Toggle</button>
+					</div>
+
+					<div class="input">
+						<button onclick="handlers.toggleAll()">Toggle All</button>
+					</div>
+
+					<div>
+						<ul>
+						</ul>
+					</div>
+				</section>
+			</div>
 		</div>
 
 

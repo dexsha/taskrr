@@ -86,6 +86,7 @@ var view = {
 
 			todoLi.id = position;
 			todoLi.textContent = todoTextWithCompletion;
+			todoLi.className = 'liClass';
 			todoLi.appendChild(this.createDeleteButton());
 			todosUl.appendChild(todoLi);
 		}, this);
