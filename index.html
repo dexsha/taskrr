@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>taskrr</title>
+	</head>
+	<body>
+
+		<h2>Taskrr</h2>
+		<div>
+			<button onclick="handlers.toggleAll()">Toggle All</button>
+		</div>
+		
+		<div>
+			<input type="text" id="addTodoText">
+			<button onclick="handlers.addTodo()">Add</button>
+		</div>
+
+		<div>
+			<input type="number" id="editPosition" placeholder="ID">
+			<input type="text" id="editTodoText" placeholder="New value">
+			<button onclick="handlers.editTodo()">Edit</button>
+		</div>
+
+		<div>
+			<input type="number" id="togglePosition" placeholder="ID">
+			<button onclick="handlers.toggleTodo()">Toggle</button>
+		</div>
+
+		<div>
+			<ul>
+			</ul>
+		</div>
+
+
+		<script src="script.js"></script> 
+	</body>
+</html>
