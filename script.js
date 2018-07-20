@@ -5,13 +5,16 @@ var todoList = {
 			todoText: todoText,
 			completed: false
 		}); 
+		saveTodosToLocal();
 	},
 	edit: function(index, newText){
 		this.todos[index].todoText = newText;
+		saveTodosToLocal();
 	},
 	toggleCompleted: function(index){
 		var todo = this.todos[index];
 		todo.completed = !todo.completed;
+		saveTodosToLocal();
 	},
 	toggleAll: function(){
 		var totalTodos = this.todos.length;
@@ -31,9 +34,11 @@ var todoList = {
 				todo.completed = true;
 			}
 		});
+		saveTodosToLocal();
 	},
 	remove: function(index){
 		this.todos.splice(index, 1);
+		saveTodosToLocal();
 	}
 };
 
@@ -73,7 +78,8 @@ var view = {
 		var todosUl = document.querySelector("ul");
 		todosUl.innerHTML = "";
 
-		todoList.todos.forEach(function(todo, position){
+		// todoList.todos.forEach(function(todo, position){
+			todoList.todos.forEach(function(todo, position){
 			var todoLi = document.createElement("li");
 			var todoTextWithCompletion = '';
 
@@ -90,6 +96,7 @@ var view = {
 			todoLi.appendChild(this.createDeleteButton());
 			todosUl.appendChild(todoLi);
 		}, this);
+		getTodosFromLocal();
 	},
 	createDeleteButton: function(){
 		var deleteButton = document.createElement('button');
@@ -114,7 +121,23 @@ var view = {
 
 view.setUpEventListeners();
 
-// function runWithDebugger(ourFunction){
-// 	debugger;
-// 	ourFunction();
-// };
+
+// localStorage
+
+// save data to local storage
+function saveTodosToLocal(){
+	var str = JSON.stringify(todoList.todos);
+	localStorage.setItem("todos", str);
+}
+
+// get data from local storage
+function getTodosFromLocal(){
+	var str = localStorage.getItem("todos");
+	todoList.todos = JSON.parse(str);
+	if(!todoList.todos){
+		todos = [];
+	}
+}
+
+getTodosFromLocal();
+view.displayTodos();
