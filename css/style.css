@@ -50,6 +50,7 @@ table {
 
 body {
 	background-image: url("../images/bg01.png");
+	/*background-color: #7B7B7B;*/
 	background-repeat: repeat;
 }
 
@@ -78,10 +79,6 @@ h1 {
 
 #taskrr {
 	float: left;
-}
-
-.deleteButton {
-	margin-left: 10px;
 }
 
 #logo {
@@ -113,8 +110,180 @@ h1 {
 	margin-bottom: 5px;
 }
 
+#addTodoText {
+	height: 30px;
+	border: 0px solid red;
+	background-color: #E8E8E8;
+	border-radius: 4px;
+	padding: 12px 7px;	
+}
+
+.fa-plus {
+	vertical-align: middle;
+	font-size: 20px;
+	color: #28CA00;
+}
+
+.fa-plus:hover {
+	font-size: 20px;
+	color: #31F900;
+}
+
+#addTodoText:focus {
+	outline-width: 0;
+}
+
 .liClass {
-	margin-bottom: 5px;
+	width: 400px;
+	height: 40px;
+	line-height: 40px;
+}
+
+.liClass:hover {
+	background-color: #EDEDED;
+	border-radius: 5px;
+}
+
+.liClassCompleted {
+	width: 400px;
+	height: 40px;
+	text-decoration: line-through;
+	color: #A7A7A7;
+	line-height: 40px;
+}
+
+.liClassCompleted:hover {
+	background-color: #EDEDED;
+	border-radius: 5px;
+}
+
+.deleteButton {
+	float: right;
+	margin-left: 5px;
+}
+
+.fa-edit {
+	display: none;
+	line-height: 40px;
+	font-size: 17px;
+	float: right;
+	color: #0083D3;	
+}
+
+.fa-edit:hover {
+	float: right;
+	color: #00B6FF;	
+}
+
+.liClass:hover > .fa-edit {
+	display: inline;
+}
+
+.liClass:hover > .fa-times {
+	display: inline;
+}
+
+.liClass:hover > .fa-edit {
+	display: inline;
+}
+
+.liClassCompleted:hover > .fa-times {
+	display: inline;
+}
+
+.fa-times {
+	display: none;
+	line-height: 40px;
+	font-size: 23px;
+	float: right;
+	margin-left: 5px;
+	margin-right: 10px;
+	color: #B40000;
+}
+
+.fa-times:hover {
+	float: right;
+	margin-left: 5px;
+	color: #FF0000;
+}
+
+.fa-check {
+	float: left;
+	margin-left: 5px;
+	line-height: 40px;
+	font-size: 20px;
+	color: #28CA00;
+}
+
+.fa-check:hover {
+	color: #31F900;
+}
+
+.editButton {
+	margin-left: 10px;
+}
+
+.editTextInput {
+	margin-top: 5px;
+	margin-left: 26px;
+	float: left;
+	height: 30px;
+	border: 0px solid red;
+	background-color: #D2D2D2;
+	border-radius: 4px;
+	padding: 12px 7px;
+	outline-width: 0;
+}
+
+.confirmEditButton {
+	margin-left: 5px;
+	float: left;
+}
+
+.checkboxInput {
+	position: relative;
+	float: left;
+	margin-right: 5px;
+	margin-left: 10px;
+	margin-top: 13px;
+	opacity: 0;
+	z-index: 999;
+	/*display: none;*/
+}
+
+.fa-circle {
+	color: #A7A7A7;
+	font-size: 20px;
+	position: relative;
+	float: left;
+	margin-right: 5px;
+	margin-top: 10px;
+	margin-left: -20px;
+	z-index: 900;
+}
+
+.fa-check-circle {
+	color: #28CA00;
+	font-size: 20px;
+	position: relative;
+	margin-right: 5px;
+	margin-left: -20px;
+	float: left;
+	display: none;
+	z-index: 900;
+}
+
+input[type=checkbox]:checked ~ .fa-check-circle{
+	display: inline-block;
+	margin-top: 10px;
+}
+
+input[type=checkbox]:checked ~ .fa-circle{
+	display: none;
+}
+
+input[type=checkbox]{
+	transform: scale(3);
 }
 
 .image img{
