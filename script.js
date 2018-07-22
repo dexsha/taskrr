@@ -14,6 +14,7 @@ var todoList = {
 	toggleCompleted: function(index){
 		var todo = this.todos[index];
 		todo.completed = !todo.completed;
+		//todo.push(this.todos.splice(index, 1));
 		saveTodosToLocal();
 	},
 	toggleAll: function(){
@@ -49,8 +50,11 @@ var handlers = {
 	},
 	addTodo: function(){
 		var addTodoText = document.getElementById("addTodoText");
-		todoList.add(addTodoText.value);
-		addTodoText.value = "";
+		if(addTodoText.value != ""){
+			todoList.add(addTodoText.value);
+			addTodoText.value = "";
+			addTodoText.focus();
+		}
 		view.displayTodos();
 	},
 	editTodo: function(position){
@@ -70,16 +74,19 @@ var handlers = {
 
 var view = {
 	displayTodos: function(){
-		var todosUl = document.querySelector("ul");
+		var todosUl = document.getElementById("notcompleted");
+		var todosUlCompleted = document.getElementById("completed");
 		var checkbox = document.getElementsByClassName("checkboxInput");
 		todosUl.innerHTML = "";
+		todosUlCompleted.innerHTML = "";
+		console.log(todoList.todos);
 
 		todoList.todos.forEach(function(todo, position){
 			var todoLi = document.createElement("li");
 			var liClass = 'liClass';
 			var isItChecked = false;
 
-			if(todo.completed === true){
+			if(todo.completed){
 				liClass = 'liClassCompleted';
 				isItChecked = true;
 			}
@@ -92,7 +99,14 @@ var view = {
 			todoLi.appendChild(this.checkboxFA2());
 			todoLi.appendChild(this.createDeleteButton());
 			todoLi.appendChild(this.createEditButton());
-			todosUl.appendChild(todoLi);
+
+			if(!todo.completed){
+				todosUl.appendChild(todoLi);
+			}
+			else{
+				//todosUlCompleted.insertBefore(todoLi, todosUl.childNodes[0]);
+				todosUlCompleted.appendChild(todoLi);
+			}
 		}, this);
 		getTodosFromLocal();
 	},
@@ -128,6 +142,7 @@ var view = {
 		editTextInput.type = 'text';
 		editTextInput.className = 'editTextInput';
 		editTextInput.value = todoList.todos[position].todoText;
+		
 		return editTextInput;
 	},
 	createConfirmEditButton: function(position){
@@ -136,10 +151,10 @@ var view = {
 		return confirmEditButton;
 	},
 	setUpEventListeners: function(){
-		var todosUl = document.querySelector('ul');
+		var todosUl = document.getElementsByClassName('todoUl');
+		var input = document.getElementById('addTodoText');
 
-		todosUl.addEventListener("click", function(event){
-			// Get the element that was clicked
+		function todoUl(){
 			var elementClicked = event.target;
 
 			// Check if elementClicked is a delete button
@@ -156,12 +171,40 @@ var view = {
 				var editButton = document.getElementsByClassName('editButton');
 				todoLi.appendChild(view.createEditTextInput(parseInt(elementClicked.parentNode.id)));
 				todoLi.appendChild(view.createConfirmEditButton(parseInt(elementClicked.parentNode.id)));
+				var editTextInput = document.getElementsByClassName('editTextInput')[0];
+				editTextInput.addEventListener("keydown", function(event){
+					if(event.keyCode === 13){
+						handlers.editTodo(parseInt(elementClicked.parentNode.id));
+						console.log("test");
+					}
+				});
+				editTextInput.focus();
 				//todoLi.removeChild(editButton[parseInt(elementClicked.parentNode.id)]);
 			}
 			if(elementClicked.className === 'fas fa-check'){
 				handlers.editTodo(parseInt(elementClicked.parentNode.id));
 			}
+		}
+
+		todosUl[0].addEventListener("click", function(event){
+			// Get the element that was clicked
+			todoUl();
+			
 		});	
+
+		todosUl[1].addEventListener("click", function(event){
+			// Get the element that was clicked
+			todoUl();
+			
+		});	
+		
+		input.addEventListener("keydown", function(event){
+			if(event.keyCode === 13){
+				handlers.addTodo();
+			}
+		});
+
+		
 	}
 };
 
