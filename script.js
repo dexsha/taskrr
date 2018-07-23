@@ -1,11 +1,26 @@
 var todoList = {
 	todos: [],
-	add: function(todoText){
+	lists: [],
+	addTodo: function(todoText){
 		this.todos.push({
 			todoText: todoText,
 			completed: false
 		}); 
 		saveTodosToLocal();
+	},
+	addTodoToList: function(todoText, index){
+		this.lists[index].todos.push({
+			todoText: todoText,
+			completed: false
+		}); 
+		saveListsToLocal();
+	},
+	addList: function(newList){
+		this.lists.push({
+			listname: newList,
+			todos: []
+		});
+		saveListsToLocal();
 	},
 	edit: function(index, newText){
 		this.todos[index].todoText = newText;
@@ -51,7 +66,7 @@ var handlers = {
 	addTodo: function(){
 		var addTodoText = document.getElementById("addTodoText");
 		if(addTodoText.value != ""){
-			todoList.add(addTodoText.value);
+			todoList.addTodo(addTodoText.value);
 			addTodoText.value = "";
 			addTodoText.focus();
 		}
@@ -86,10 +101,26 @@ var view = {
 			var liClass = 'liClass';
 			var isItChecked = false;
 
+
 			if(todo.completed){
-				liClass = 'liClassCompleted';
-				isItChecked = true;
+					liClass = 'liClassCompleted';
+					isItChecked = true;
 			}
+
+			// if(todo.todoText.length > 40){	
+			// 	if(todo.completed){
+			// 		liClass = 'liClassCompletedLongText';
+			// 		isItChecked = true;
+
+			// 	}
+			// 	else{
+			// 		liClass = 'liClassLongText'
+			// 	}
+			// }
+			// else if(todo.completed){
+			// 		liClass = 'liClassCompleted';
+			// 		isItChecked = true;
+			// }
 			
 			todoLi.id = position;
 			todoLi.textContent =  todo.todoText;
@@ -99,14 +130,16 @@ var view = {
 			todoLi.appendChild(this.checkboxFA2());
 			todoLi.appendChild(this.createDeleteButton());
 			todoLi.appendChild(this.createEditButton());
+			todosUl.appendChild(todoLi)
 
-			if(!todo.completed){
-				todosUl.appendChild(todoLi);
-			}
-			else{
-				//todosUlCompleted.insertBefore(todoLi, todosUl.childNodes[0]);
-				todosUlCompleted.appendChild(todoLi);
-			}
+			// Sort completed
+			// if(!todo.completed){
+			// 	todosUl.appendChild(todoLi);
+			// }
+			// else{
+			// 	//todosUlCompleted.insertBefore(todoLi, todosUl.childNodes[0]);
+			// 	todosUlCompleted.appendChild(todoLi);
+			// }
 		}, this);
 		getTodosFromLocal();
 	},
@@ -219,6 +252,11 @@ function saveTodosToLocal(){
 	localStorage.setItem("todos", str);
 }
 
+function saveListsToLocal(){
+	var str = JSON.stringify(todoList.lists);
+	localStorage.setItem("lists", str);
+}
+
 // get data from local storage
 function getTodosFromLocal(){
 	var str = localStorage.getItem("todos");
@@ -228,5 +266,14 @@ function getTodosFromLocal(){
 	}
 }
 
+function getListsFromLocal(){
+	var str = localStorage.getItem("lists");
+	todoList.lists = JSON.parse(str);
+	if(!todoList.lists){
+		todoList.lists = [];
+	}
+}
+
 getTodosFromLocal();
+getListsFromLocal();
 view.displayTodos();
