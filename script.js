@@ -133,52 +133,61 @@ var view = {
 		todosUlCompleted.innerHTML = "";
 		console.log(todoList.todos);
 
-		// todoList.todos.forEach(function(todo, position){
-		todoList.lists[index].todos.forEach(function(todo, position){
-			var todoLi = document.createElement("li");
-			var liClass = 'liClass';
-			var isItChecked = false;
+		
+		if(todoList.lists.length === 0){
+			var noTasks = document.createElement("p");
+			noTasks.className = "noTasks";
+			noTasks.textContent = "No tasks. Would you like to add one?";
+			todosUl.appendChild(noTasks);
+		}
+		else{
+			todoList.lists[index].todos.forEach(function(todo, position){
+				var todoLi = document.createElement("li");
+				var liClass = 'liClass';
+				var isItChecked = false;
 
+				if(todo.completed){
+						liClass = 'liClassCompleted';
+						isItChecked = true;
+				}
 
-			if(todo.completed){
-					liClass = 'liClassCompleted';
-					isItChecked = true;
-			}
+				// if(todo.todoText.length > 40){	
+				// 	if(todo.completed){
+				// 		liClass = 'liClassCompletedLongText';
+				// 		isItChecked = true;
 
-			// if(todo.todoText.length > 40){	
-			// 	if(todo.completed){
-			// 		liClass = 'liClassCompletedLongText';
-			// 		isItChecked = true;
+				// 	}
+				// 	else{
+				// 		liClass = 'liClassLongText'
+				// 	}
+				// }
+				// else if(todo.completed){
+				// 		liClass = 'liClassCompleted';
+				// 		isItChecked = true;
+				// }
+				
 
-			// 	}
-			// 	else{
-			// 		liClass = 'liClassLongText'
-			// 	}
-			// }
-			// else if(todo.completed){
-			// 		liClass = 'liClassCompleted';
-			// 		isItChecked = true;
-			// }
-			
-			todoLi.id = position;
-			todoLi.textContent =  todo.todoText;
-			todoLi.className = liClass;
-			todoLi.appendChild(this.createCheckbox(isItChecked));
-			todoLi.appendChild(this.checkboxFA1());
-			todoLi.appendChild(this.checkboxFA2());
-			todoLi.appendChild(this.createDeleteButton());
-			todoLi.appendChild(this.createEditButton());
-			todosUl.appendChild(todoLi)
+				todoLi.id = position;
+				todoLi.textContent =  todo.todoText;
+				todoLi.className = liClass;
+				todoLi.appendChild(this.createCheckbox(isItChecked));
+				todoLi.appendChild(this.checkboxFA1());
+				todoLi.appendChild(this.checkboxFA2());
+				todoLi.appendChild(this.createDeleteButton());
+				todoLi.appendChild(this.createEditButton());
+				todosUl.appendChild(todoLi)
 
-			// Sort completed
-			// if(!todo.completed){
-			// 	todosUl.appendChild(todoLi);
-			// }
-			// else{
-			// 	//todosUlCompleted.insertBefore(todoLi, todosUl.childNodes[0]);
-			// 	todosUlCompleted.appendChild(todoLi);
-			// }
-		}, this);
+				// Sort completed
+				// if(!todo.completed){
+				// 	todosUl.appendChild(todoLi);
+				// }
+				// else{
+				// 	//todosUlCompleted.insertBefore(todoLi, todosUl.childNodes[0]);
+				// 	todosUlCompleted.appendChild(todoLi);
+				// }
+			}, this);
+		}
+		
 		getTodosFromLocal();
 	},
 	displayLists: function(){
@@ -193,10 +202,19 @@ var view = {
 			todoLi.textContent = list.listName;
 			todoLi.className = liClass;
 
+
 			todoLi.appendChild(this.createDeleteButton());
 			todoLi.appendChild(this.createEditButton());
 			listsUl.appendChild(todoLi);
 		}, this);
+
+		if(todoList.lists.length === 0){
+
+		}
+		else{
+			var listsLiClass = document.getElementsByClassName('listsLiClass');
+			listsLiClass[listIndex].className  += " active";
+		}
 
 		//if clicked get eleement by id, list Index. .....
 		getListsFromLocal();
@@ -257,7 +275,10 @@ var view = {
 		function todoUl(){
 			var elementClicked = event.target;
 
-			// Check if elementClicked is a delete button
+			
+			if(elementClicked.className === 'noTasks'){
+				input.focus();
+			}
 			if(elementClicked.className === 'fas fa-times'){
 				handlers.removeTodo(parseInt(elementClicked.parentNode.id));
 			}
@@ -282,6 +303,20 @@ var view = {
 			if(elementClicked.className === 'fas fa-check'){
 				handlers.editTodo(parseInt(elementClicked.parentNode.id));
 			}
+			if(elementClicked.className === 'liClass'){
+				view.displayTodos();
+				var todoLi = document.getElementById(elementClicked.id);
+				todoLi.textContent = "";
+				todoLi.appendChild(view.createEditTextInputTodo(parseInt(elementClicked.id)));
+				todoLi.appendChild(view.createConfirmEditButton(parseInt(elementClicked.id)));
+				var editTextInput = document.getElementsByClassName('editTextInput')[0];
+				editTextInput.addEventListener("keydown", function(event){
+					if(event.keyCode === 13){
+						handlers.editTodo(parseInt(elementClicked.id));
+					}
+				});
+				editTextInput.focus();
+			}
 		}
 
 		function listUl(){
@@ -293,7 +328,35 @@ var view = {
 				var theId = elementClicked.id.replace( /^\D+/g, '');
 				view.displayTodos(parseInt(theId));
 				listIndex = parseInt(theId);
+				
 
+				if(todoList.lists.length === 0){
+
+				}
+				else{
+					var listsLiClass = document.getElementsByClassName('listsLiClass');
+
+					listsLiClass[listIndex].className  += " active";
+					
+					// elementClicked.className += " active";
+
+					// var current = document.getElementsByClassName(" active");
+
+					for(var i = 0; i<listsLiClass.length; i++)
+					{
+						listsLiClass[i].className = listsLiClass[i].className.replace(" active", "");
+					}
+
+					listsLiClass[listIndex].className  += " active";
+				}
+
+				
+
+				// var current = document.getElementsByClassName("active");
+				// current[listIndex].className = current[0].className.replace(" active", "");
+				// elementClicked.className += " active";
+				
+								
 				saveListIndex();
 			}
 
@@ -304,7 +367,6 @@ var view = {
 				view.displayTodos();
 			}
 			if(elementClicked.className === 'far fa-edit'){
-				debugger;
 				view.displayLists();
 				var listsLi = document.getElementById(elementClicked.parentNode.id);
 				var theId = elementClicked.parentNode.id.replace( /^\D+/g, '');
@@ -325,6 +387,24 @@ var view = {
 			if(elementClicked.className === 'fas fa-check'){
 				handlers.editList(parseInt(elementClicked.parentNode.id));
 			}
+			// if(elementClicked.className === 'listsLiClass'){
+				
+			// 	view.displayLists();
+			// 	var listsLi = document.getElementById(elementClicked.id);
+			// 	var theId = elementClicked.id.replace( /^\D+/g, '');
+			// 	listsLi.textContent = "";
+			// 	listsLi.appendChild(view.createEditTextInputList(parseInt(elementClicked.id)));
+			// 	listsLi.appendChild(view.createConfirmEditButton(parseInt(elementClicked.id)));
+			// 	var editTextInput = document.getElementsByClassName('editTextInput')[0];
+			// 	editTextInput.value = todoList.lists[parseInt(theId)].listName;
+			// 	editTextInput.addEventListener("keydown", function(event){
+			// 		if(event.keyCode === 13){
+			// 			handlers.editList(parseInt(elementClicked.id));
+			// 			console.log("test");
+			// 		}
+			// 	});
+			// 	editTextInput.focus();
+			// }
 
 		}
 
