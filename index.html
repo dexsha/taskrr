@@ -16,26 +16,30 @@
 					<a href="index.html" id="logo">taskrr</a>
 				</section>
 
+
+
 				<section id="taskrr">
 					<div class="input">
-						<input type="text" id="addTodoText">
+						<input type="text" id="addTodoText" placeholder="Add a task ...">
 						<i class="fas fa-plus" onclick="handlers.addTodo()"></i>
 					</div>
 
-<!-- 					<div class="input">
-						<button onclick="handlers.toggleAll()">Toggle All</button>
-					</div> -->
-
 					<div>
-						<ul id="notcompleted" class="todoUl">
-						</ul>
+						<ul id="notcompleted" class="todoUl"></ul>
 					</div>
 
 					<div>
-						<ul id="completed" class="todoUl">
-						</ul>
+						<ul id="completed" class="todoUl"></ul>
 					</div>
 				</section>
+
+				<section id="lists">
+					<div class="input">
+						<input type="text" id="addListText" maxlength="40" placeholder="Add a list ...">
+						<i class="fas fa-plus" onclick="handlers.addList()"></i>
+					</div>
+					<ul class="listsUl"></ul>
+				</section>	
 			</div>
 		</div>
 

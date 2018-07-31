@@ -1,3 +1,5 @@
+var listIndex = 0;
+
 var todoList = {
 	todos: [],
 	lists: [],
@@ -17,20 +19,24 @@ var todoList = {
 	},
 	addList: function(newList){
 		this.lists.push({
-			listname: newList,
+			listName: newList,
 			todos: []
 		});
 		saveListsToLocal();
 	},
-	edit: function(index, newText){
-		this.todos[index].todoText = newText;
-		saveTodosToLocal();
+	editTodo: function(index, newText){
+		this.lists[listIndex].todos[index].todoText = newText;
+		saveListsToLocal();
+	},
+	editList: function(index, newText){
+		this.lists[listIndex].listName = newText;
+		saveListsToLocal();
 	},
 	toggleCompleted: function(index){
-		var todo = this.todos[index];
+		var todo = this.lists[listIndex].todos[index];
 		todo.completed = !todo.completed;
 		//todo.push(this.todos.splice(index, 1));
-		saveTodosToLocal();
+		saveListsToLocal();
 	},
 	toggleAll: function(){
 		var totalTodos = this.todos.length;
@@ -52,9 +58,13 @@ var todoList = {
 		});
 		saveTodosToLocal();
 	},
-	remove: function(index){
-		this.todos.splice(index, 1);
-		saveTodosToLocal();
+	removeTodo: function(index){
+		this.lists[listIndex].todos.splice(index, 1);
+		saveListsToLocal();
+	},
+	removeList: function(index){
+		this.lists.splice(index, 1);
+		saveListsToLocal();
 	}
 };
 
@@ -63,32 +73,59 @@ var handlers = {
 		todoList.toggleAll();
 		view.displayTodos();
 	},
-	addTodo: function(){
+	addTodo: function(index = listIndex){
 		var addTodoText = document.getElementById("addTodoText");
 		if(addTodoText.value != ""){
-			todoList.addTodo(addTodoText.value);
-			addTodoText.value = "";
-			addTodoText.focus();
+			if(todoList.lists.length === 0){
+				todoList.addList("New list");
+				todoList.addTodoToList(addTodoText.value, 0);
+				addTodoText.value = "";
+				addTodoText.focus();
+				view.displayLists();
+			}
+			else{
+				todoList.addTodoToList(addTodoText.value, index);
+				addTodoText.value = "";
+				addTodoText.focus();
+			}
 		}
 		view.displayTodos();
 	},
+	addList: function(){
+		var addListText = document.getElementById("addListText");
+		if(addListText.value != ""){
+			todoList.addList(addListText.value);
+			addListText.value = "";
+			addListText.focus();
+		}
+		view.displayLists();
+	},
 	editTodo: function(position){
 		var editTextInput = document.getElementsByClassName('editTextInput')[0];
-		todoList.edit(position, editTextInput.value);
+		todoList.editTodo(position, editTextInput.value);
 		view.displayTodos();
 	},
+	editList: function(position){
+		var editTextInput = document.getElementsByClassName('editTextInput')[0];
+		todoList.editList(position, editTextInput.value);
+		view.displayLists();
+	},
 	removeTodo: function(position){
-		todoList.remove(position);
+		todoList.removeTodo(position);
 		view.displayTodos();
 	},
 	toggleTodo: function(position){
 		todoList.toggleCompleted(position);
 		view.displayTodos();
+	},
+	removeList: function(position){
+		todoList.removeList(position);
+		view.displayLists();
 	}
 };
 
 var view = {
-	displayTodos: function(){
+	displayTodos: function(index = listIndex){
 		var todosUl = document.getElementById("notcompleted");
 		var todosUlCompleted = document.getElementById("completed");
 		var checkbox = document.getElementsByClassName("checkboxInput");
@@ -96,7 +133,8 @@ var view = {
 		todosUlCompleted.innerHTML = "";
 		console.log(todoList.todos);
 
-		todoList.todos.forEach(function(todo, position){
+		// todoList.todos.forEach(function(todo, position){
+		todoList.lists[index].todos.forEach(function(todo, position){
 			var todoLi = document.createElement("li");
 			var liClass = 'liClass';
 			var isItChecked = false;
@@ -143,6 +181,26 @@ var view = {
 		}, this);
 		getTodosFromLocal();
 	},
+	displayLists: function(){
+		var listsUl = document.getElementsByClassName("listsUl")[0];
+		listsUl.innerHTML = "";
+
+		todoList.lists.forEach(function(list, position){
+			var todoLi = document.createElement("li");
+			var liClass = 'listsLiClass';
+
+			todoLi.id = String("l" + position);
+			todoLi.textContent = list.listName;
+			todoLi.className = liClass;
+
+			todoLi.appendChild(this.createDeleteButton());
+			todoLi.appendChild(this.createEditButton());
+			listsUl.appendChild(todoLi);
+		}, this);
+
+		//if clicked get eleement by id, list Index. .....
+		getListsFromLocal();
+	},
 	createCheckbox: function(isItChecked){
 		var checkbox = document.createElement('input');
 		checkbox.type = 'checkbox';
@@ -170,11 +228,19 @@ var view = {
 		editButton.className = 'far fa-edit';
 		return editButton;
 	},
-	createEditTextInput: function(position){
+	createEditTextInputTodo: function(position){
 		var editTextInput = document.createElement('input');
 		editTextInput.type = 'text';
 		editTextInput.className = 'editTextInput';
-		editTextInput.value = todoList.todos[position].todoText;
+		editTextInput.value = todoList.lists[listIndex].todos[position].todoText;
+		
+		return editTextInput;
+	},
+	createEditTextInputList: function(position){
+		var editTextInput = document.createElement('input');
+		editTextInput.type = 'text';
+		editTextInput.className = 'editTextInput';
+		
 		
 		return editTextInput;
 	},
@@ -185,6 +251,7 @@ var view = {
 	},
 	setUpEventListeners: function(){
 		var todosUl = document.getElementsByClassName('todoUl');
+		var listsUl = document.getElementsByClassName('listsUl');
 		var input = document.getElementById('addTodoText');
 
 		function todoUl(){
@@ -199,16 +266,14 @@ var view = {
 			}
 			if(elementClicked.className === 'far fa-edit'){
 				view.displayTodos();
-				var todoLi = document.getElementById(elementClicked.parentNode.id)
+				var todoLi = document.getElementById(elementClicked.parentNode.id);
 				todoLi.textContent = "";
-				var editButton = document.getElementsByClassName('editButton');
-				todoLi.appendChild(view.createEditTextInput(parseInt(elementClicked.parentNode.id)));
+				todoLi.appendChild(view.createEditTextInputTodo(parseInt(elementClicked.parentNode.id)));
 				todoLi.appendChild(view.createConfirmEditButton(parseInt(elementClicked.parentNode.id)));
 				var editTextInput = document.getElementsByClassName('editTextInput')[0];
 				editTextInput.addEventListener("keydown", function(event){
 					if(event.keyCode === 13){
 						handlers.editTodo(parseInt(elementClicked.parentNode.id));
-						console.log("test");
 					}
 				});
 				editTextInput.focus();
@@ -218,6 +283,54 @@ var view = {
 				handlers.editTodo(parseInt(elementClicked.parentNode.id));
 			}
 		}
+
+		function listUl(){
+			var elementClicked = event.target;
+			console.log(event);
+
+			if(elementClicked.className === 'listsLiClass'){
+				
+				var theId = elementClicked.id.replace( /^\D+/g, '');
+				view.displayTodos(parseInt(theId));
+				listIndex = parseInt(theId);
+
+				saveListIndex();
+			}
+
+			if(elementClicked.className === 'fas fa-times'){
+				var theId = elementClicked.parentNode.id.replace( /^\D+/g, '');
+				handlers.removeList(parseInt(theId));
+				listIndex = 0;
+				view.displayTodos();
+			}
+			if(elementClicked.className === 'far fa-edit'){
+				debugger;
+				view.displayLists();
+				var listsLi = document.getElementById(elementClicked.parentNode.id);
+				var theId = elementClicked.parentNode.id.replace( /^\D+/g, '');
+				listsLi.textContent = "";
+				listsLi.appendChild(view.createEditTextInputList(parseInt(elementClicked.parentNode.id)));
+				listsLi.appendChild(view.createConfirmEditButton(parseInt(elementClicked.parentNode.id)));
+				var editTextInput = document.getElementsByClassName('editTextInput')[0];
+				editTextInput.value = todoList.lists[parseInt(theId)].listName;
+				editTextInput.addEventListener("keydown", function(event){
+					if(event.keyCode === 13){
+						handlers.editList(parseInt(elementClicked.parentNode.id));
+						console.log("test");
+					}
+				});
+				editTextInput.focus();
+				//todoLi.removeChild(editButton[parseInt(elementClicked.parentNode.id)]);
+			}
+			if(elementClicked.className === 'fas fa-check'){
+				handlers.editList(parseInt(elementClicked.parentNode.id));
+			}
+
+		}
+
+		listsUl[0].addEventListener("click", function(event){
+			listUl();
+		});
 
 		todosUl[0].addEventListener("click", function(event){
 			// Get the element that was clicked
@@ -243,13 +356,15 @@ var view = {
 
 view.setUpEventListeners();
 
-
-// localStorage
-
 // save data to local storage
 function saveTodosToLocal(){
 	var str = JSON.stringify(todoList.todos);
 	localStorage.setItem("todos", str);
+}
+
+function saveListIndex(){
+	var str = JSON.stringify(listIndex);
+	localStorage.setItem("listIndex", str);
 }
 
 function saveListsToLocal(){
@@ -274,6 +389,16 @@ function getListsFromLocal(){
 	}
 }
 
+function getListIndex(){
+	var str = localStorage.getItem("listIndex");
+	listIndex = JSON.parse(str);
+	if(!listIndex){
+		listIndex = 0;
+	}
+}
+
 getTodosFromLocal();
 getListsFromLocal();
+getListIndex();
 view.displayTodos();
+view.displayLists();
