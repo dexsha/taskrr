@@ -61,7 +61,7 @@ body {
 }
 
 .container {
-	max-width: 950px;
+	max-width: 1350px;
 	border: 0px solid #000;	
 }
 
@@ -79,6 +79,7 @@ h1 {
 
 #taskrr {
 	float: left;
+	width: 400px;
 }
 
 #logo {
@@ -118,6 +119,22 @@ h1 {
 	padding: 12px 7px;	
 }
 
+#addTodoText:focus {
+	outline-width: 0;
+}
+
+#addListText {
+	height: 30px;
+	border: 0px solid red;
+	background-color: #E8E8E8;
+	border-radius: 4px;
+	padding: 12px 7px;	
+}
+
+#addListText:focus {
+	outline-width: 0;
+}
+
 .fa-plus {
 	vertical-align: middle;
 	font-size: 20px;
@@ -129,19 +146,19 @@ h1 {
 	color: #31F900;
 }
 
-#addTodoText:focus {
-	outline-width: 0;
-}
 
 .liClass {
 	width: 400px;
 	height: 40px;
 	line-height: 40px;
+	border-bottom: 1px solid #EAEAEA;
+	/*position: relative;*/
 }
 
 .liClass:hover {
 	background-color: #EDEDED;
 	border-radius: 5px;
+	cursor: pointer;
 }
 
 .liClassCompleted {
@@ -150,11 +167,66 @@ h1 {
 	text-decoration: line-through;
 	color: #A7A7A7;
 	line-height: 40px;
+	position: relative;
 }
 
 .liClassCompleted:hover {
 	background-color: #EDEDED;
 	border-radius: 5px;
+	cursor: pointer;
+}
+
+.liClassLongText {
+	width: 400px;
+	padding-left: 40px;
+	padding-right: 50px;
+	line-height: 25px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+.liClassLongText:hover {
+	background-color: #EDEDED;
+	border-radius: 5px;
+}
+
+.liClassCompletedLongText {
+	width: 400px;
+	padding-left: 40px;
+	padding-right: 50px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	text-decoration: line-through;
+	color: #A7A7A7;
+	line-height: 25px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+.liClassCompletedLongText:hover {
+	background-color: #EDEDED;
+	border-radius: 5px;
+}
+
+#lists {
+	float: left;
+	margin-left: 30px;
+}
+
+.listsLiClass {
+	padding-left: 20px;
+	width: 400px;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #EAEAEA;
+}
+
+.listsLiClass:hover, .active {
+	background-color: #EDEDED;
+	border-radius: 5px;
+	cursor: pointer;
 }
 
 .deleteButton {
@@ -165,7 +237,7 @@ h1 {
 .fa-edit {
 	display: none;
 	line-height: 40px;
-	font-size: 17px;
+	font-size: 18px;
 	float: right;
 	color: #0083D3;	
 }
@@ -180,6 +252,14 @@ h1 {
 }
 
 .liClass:hover > .fa-times {
+	display: inline;
+}
+
+.listsLiClass:hover > .fa-edit {
+	display: inline;
+}
+
+.listsLiClass:hover > .fa-times {
 	display: inline;
 }
 
@@ -248,7 +328,9 @@ h1 {
 	margin-top: 13px;
 	opacity: 0;
 	z-index: 999;
-	/*display: none;*/
+/*	position: absolute; 
+	left: -30px; 
+	top: 0;*/
 }
 
 .fa-circle {
@@ -260,6 +342,9 @@ h1 {
 	margin-top: 10px;
 	margin-left: -20px;
 	z-index: 900;
+/*	position: absolute; 
+	left: 0px; 
+	top: 0;*/
 }
 
 .fa-check-circle {
@@ -271,6 +356,9 @@ h1 {
 	float: left;
 	display: none;
 	z-index: 900;
+/*	position: absolute; 
+	left: 0px; 
+	top: 0;*/
 }
 
 input[type=checkbox]:checked ~ .fa-check-circle{
@@ -299,50 +387,24 @@ input[type=checkbox]{
 }
 
 
-@media screen and (max-width: 1680px) {
-		.container img {
-
-		}
-	}
-
-@media screen and (max-width: 1500px) {
-	.container img {
-	
-	}
-}
-
-@media screen and (max-width: 1280px) {
-	.container img {
-	
-	}
-}
-
-@media screen and (max-width: 980px) {
-	.container img {
-	
-	}
-}
-
 @media screen and (max-width: 800px) {
-	#sidebar, #gallery {
+	#sidebar {
 		float: none; 
-		width: 100%;
+		width: 200px;
 		margin-bottom:20px;
 		margin-left: auto;
 		margin-right: auto;
 	}
 
+	#taskrr {
+		float: none;
+		margin-left: auto;
+		margin-right: auto;		
+	}
+
 	#wrapper {
 		margin-top: 50px;
 	}
-
-	.description {
-		width: 220px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-
-
 }
 
 
