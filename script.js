@@ -131,50 +131,43 @@ var view = {
 		var checkbox = document.getElementsByClassName("checkboxInput");
 		todosUl.innerHTML = "";
 		todosUlCompleted.innerHTML = "";
-		console.log(todoList.todos);
+		// console.log(todoList.todos);
+		
+		var noTasks = document.createElement("p");
+		noTasks.className = "noTasks";
+		noTasks.textContent = "No tasks. Would you like to add one?";
 
 		
 		if(todoList.lists.length === 0){
-			var noTasks = document.createElement("p");
-			noTasks.className = "noTasks";
-			noTasks.textContent = "No tasks. Would you like to add one?";
 			todosUl.appendChild(noTasks);
+		}
+		else if(todoList.lists[index].todos.length === 0){
+					todosUl.appendChild(noTasks);
 		}
 		else{
 			todoList.lists[index].todos.forEach(function(todo, position){
 				var todoLi = document.createElement("li");
+				var todoText = document.createElement("p");
+				todoText.className = "todoText";
+				todoText.textContent = todo.todoText;
+
 				var liClass = 'liClass';
-				var isItChecked = false;
+				var isItChecked = false;	
 
 				if(todo.completed){
 						liClass = 'liClassCompleted';
 						isItChecked = true;
 				}
 
-				// if(todo.todoText.length > 40){	
-				// 	if(todo.completed){
-				// 		liClass = 'liClassCompletedLongText';
-				// 		isItChecked = true;
-
-				// 	}
-				// 	else{
-				// 		liClass = 'liClassLongText'
-				// 	}
-				// }
-				// else if(todo.completed){
-				// 		liClass = 'liClassCompleted';
-				// 		isItChecked = true;
-				// }
-				
-
 				todoLi.id = position;
-				todoLi.textContent =  todo.todoText;
+				// todoLi.textContent =  todo.todoText;
 				todoLi.className = liClass;
 				todoLi.appendChild(this.createCheckbox(isItChecked));
 				todoLi.appendChild(this.checkboxFA1());
 				todoLi.appendChild(this.checkboxFA2());
 				todoLi.appendChild(this.createDeleteButton());
 				todoLi.appendChild(this.createEditButton());
+				todoLi.appendChild(todoText);
 				todosUl.appendChild(todoLi)
 
 				// Sort completed
@@ -215,8 +208,6 @@ var view = {
 			var listsLiClass = document.getElementsByClassName('listsLiClass');
 			listsLiClass[listIndex].className  += " active";
 		}
-
-		//if clicked get eleement by id, list Index. .....
 		getListsFromLocal();
 	},
 	createCheckbox: function(isItChecked){
@@ -247,19 +238,20 @@ var view = {
 		return editButton;
 	},
 	createEditTextInputTodo: function(position){
-		var editTextInput = document.createElement('input');
-		editTextInput.type = 'text';
+		var editTextInput = document.createElement('textarea');
 		editTextInput.className = 'editTextInput';
+		editTextInput.setAttribute("spellcheck", "false");
 		editTextInput.value = todoList.lists[listIndex].todos[position].todoText;
-		
+	  	setTimeout(function(){
+	    editTextInput.style.cssText = 'height:auto; padding:0';
+	    editTextInput.style.cssText = 'height:' + editTextInput.scrollHeight + 'px';
+	  },0);
 		return editTextInput;
 	},
 	createEditTextInputList: function(position){
 		var editTextInput = document.createElement('input');
 		editTextInput.type = 'text';
 		editTextInput.className = 'editTextInput';
-		
-		
 		return editTextInput;
 	},
 	createConfirmEditButton: function(position){
@@ -271,7 +263,18 @@ var view = {
 		var todosUl = document.getElementsByClassName('todoUl');
 		var listsUl = document.getElementsByClassName('listsUl');
 		var input = document.getElementById('addTodoText');
-
+		var inputAddList = document.getElementById('addListText');
+		
+		function autosize(){
+		  var el = this;
+		  setTimeout(function(){
+		    el.style.cssText = 'height:auto; padding:0';
+		    // for box-sizing other than "content-box" use:
+		    // el.style.cssText = '-moz-box-sizing:content-box';
+		    el.style.cssText = 'height:' + el.scrollHeight + 'px';
+		  },0);
+		}
+		
 		function todoUl(){
 			var elementClicked = event.target;
 
@@ -286,6 +289,8 @@ var view = {
 				handlers.toggleTodo(parseInt(elementClicked.parentNode.id));
 			}
 			if(elementClicked.className === 'far fa-edit'){
+
+				console.log(event);
 				view.displayTodos();
 				var todoLi = document.getElementById(elementClicked.parentNode.id);
 				todoLi.textContent = "";
@@ -297,8 +302,9 @@ var view = {
 						handlers.editTodo(parseInt(elementClicked.parentNode.id));
 					}
 				});
+				var editTextInputVar = document.querySelector('textarea');
+				editTextInputVar.addEventListener('input', autosize);
 				editTextInput.focus();
-				//todoLi.removeChild(editButton[parseInt(elementClicked.parentNode.id)]);
 			}
 			if(elementClicked.className === 'fas fa-check'){
 				handlers.editTodo(parseInt(elementClicked.parentNode.id));
@@ -429,6 +435,14 @@ var view = {
 				handlers.addTodo();
 			}
 		});
+
+		inputAddList.addEventListener("keydown", function(event){
+			if(event.keyCode === 13){
+				handlers.addList();
+			}
+		});
+
+
 
 		
 	}

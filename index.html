@@ -9,40 +9,24 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	</head>
 	<body>
+		<div class="container">
+			<section id="sidebar">
+				<a href="index.html" id="logo">taskrr</a>
+			</section>
 
-		<div id="wrapper">
-			<div class="container">
-				<section id="sidebar">
-					<a href="index.html" id="logo">taskrr</a>
-				</section>
+			<section id="taskrr">
+				<input type="text" id="addTodoText" placeholder="Add a task ...">
+				<i class="fas fa-plus" onclick="handlers.addTodo()"></i>
+				<ul id="notcompleted" class="todoUl"></ul>
+				<ul id="completed" class="todoUl"></ul>
+			</section>
 
-
-
-				<section id="taskrr">
-					<div class="input">
-						<input type="text" id="addTodoText" placeholder="Add a task ...">
-						<i class="fas fa-plus" onclick="handlers.addTodo()"></i>
-					</div>
-
-					<div>
-						<ul id="notcompleted" class="todoUl"></ul>
-					</div>
-
-					<div>
-						<ul id="completed" class="todoUl"></ul>
-					</div>
-				</section>
-
-				<section id="lists">
-					<div class="input">
-						<input type="text" id="addListText" maxlength="40" placeholder="Add a list ...">
-						<i class="fas fa-plus" onclick="handlers.addList()"></i>
-					</div>
-					<ul class="listsUl"></ul>
-				</section>	
-			</div>
+			<section id="lists">
+				<input type="text" id="addListText" maxlength="40" placeholder="Add a list ...">
+				<i class="fas fa-plus" onclick="handlers.addList()"></i>
+				<ul class="listsUl"></ul>
+			</section>	
 		</div>
-
 
 		<script src="script.js"></script> 
 	</body>
