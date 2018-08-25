@@ -2,32 +2,59 @@
 <html>
 	<head>
 		<title>taskrr</title>	
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="css/landing.css" />
 		<link rel="icon" type="image/ico" href="images/favico.ico"/>
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
 		<div class="container">
-			<section id="sidebar">
-				<a href="index.html" id="logo">taskrr</a>
+			<header>
+				<nav>
+					<div id="logo"><a href="taskrr.html">taskrr</a></div>
+					<ul>
+						<li><a href="#">Home</a></li>
+						<li><a href="#features">Features</a></li>
+						<li><a href="#pricing">Pricing</a></li>
+						<li><a href="#">Contact</a></li>
+						<li><a href="#">Login</a></li>
+					</ul>
+				</nav>
+			</header>
+
+			<section class="first">
+				<span class="intro">
+					<h1><a id="home">Task management</a><br /> 
+					made simple.</h1>
+					<h2>Minimalistic task management system that is a pleasure to use.</h2>
+				</span>
+				<img src="images/third.svg" />
 			</section>
 
-			<section id="taskrr">
-				<input type="text" id="addTodoText" placeholder="Add a task ...">
-				<i class="fas fa-plus" onclick="handlers.addTodo()"></i>
-				<ul id="notcompleted" class="todoUl"></ul>
-				<ul id="completed" class="todoUl"></ul>
+			<section class="second">
+				<span class="intro">
+					<h1><a id="features">Features</a></h1>
+					<h2>Minimalistic task management system that is a pleasure to use.</h2>
+				</span>
+				<img src="images/intro.svg" />
 			</section>
 
-			<section id="lists">
-				<input type="text" id="addListText" maxlength="40" placeholder="Add a list ...">
-				<i class="fas fa-plus" onclick="handlers.addList()"></i>
-				<ul class="listsUl"></ul>
-			</section>	
+			<section class="first">
+				<span class="intro">
+					<h1><a id="pricing">Pricing</a></h1>
+					<h2>Minimalistic task management system that is a pleasure to use.</h2>
+				</span>
+				<img src="images/second.svg" />
+			</section>
 		</div>
 
-		<script src="script.js"></script> 
+		<footer class="footer">
+			<p>© 2018 Taskrr<p>
+			<ul>
+				<li><a href="#">Terms</a></li>
+				<li><a href="#">Privacy</a></li>
+			</ul>
+		</footer>
+		
 	</body>
 </html>
