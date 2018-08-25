@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>taskrr</title>	
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="icon" type="image/ico" href="images/favico.ico"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	</head>
+	<body>
+		<div class="container">
+			<section id="sidebar">
+				<a href="#" id="logo">taskrr</a>
+			</section>
+
+			<section id="taskrr">
+				<input type="text" id="addTodoText" placeholder="Add a task ...">
+				<i class="fas fa-plus" onclick="handlers.addTodo()"></i>
+				<ul id="notcompleted" class="todoUl"></ul>
+				<ul id="completed" class="todoUl"></ul>
+			</section>
+
+			<section id="lists">
+				<input type="text" id="addListText" maxlength="40" placeholder="Add a list ...">
+				<i class="fas fa-plus" onclick="handlers.addList()"></i>
+				<ul class="listsUl"></ul>
+			</section>	
+		</div>
+
+		<script src="script.js"></script> 
+	</body>
+</html>
