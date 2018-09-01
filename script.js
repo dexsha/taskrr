@@ -3,17 +3,11 @@ var listIndex = 0;
 var todoList = {
 	todos: [],
 	lists: [],
-	addTodo: function(todoText){
-		this.todos.push({
-			todoText: todoText,
-			completed: false
-		}); 
-		saveTodosToLocal();
-	},
-	addTodoToList: function(todoText, index){
+	addTodoToList: function(todoText, tagName, index){
 		this.lists[index].todos.push({
 			todoText: todoText,
-			completed: false
+			completed: false,
+			tag: tagName
 		}); 
 		saveListsToLocal();
 	},
@@ -75,16 +69,17 @@ var handlers = {
 	},
 	addTodo: function(index = listIndex){
 		var addTodoText = document.getElementById("addTodoText");
+		var priority = document.getElementById('priority');
 		if(addTodoText.value != ""){
 			if(todoList.lists.length === 0){
 				todoList.addList("New list");
-				todoList.addTodoToList(addTodoText.value, 0);
+				todoList.addTodoToList(addTodoText.value, priority.options[priority.selectedIndex].value, 0);
 				addTodoText.value = "";
 				addTodoText.focus();
 				view.displayLists();
 			}
 			else{
-				todoList.addTodoToList(addTodoText.value, index);
+				todoList.addTodoToList(addTodoText.value, priority.options[priority.selectedIndex].value, index);
 				addTodoText.value = "";
 				addTodoText.focus();
 			}
@@ -162,6 +157,17 @@ var view = {
 				todoLi.id = position;
 				// todoLi.textContent =  todo.todoText;
 				todoLi.className = liClass;
+
+				if(todo.tag === 'high'){
+					todoLi.classList.toggle('highPriority');
+				} else if(todo.tag === 'medium'){
+					todoLi.classList.toggle('mediumPriority');
+				} else if(todo.tag === 'low'){
+					todoLi.classList.toggle('lowPriority');
+				} else if(todo.tag === 'none'){
+					todoLi.classList.toggle('noPriority');
+				}
+
 				todoLi.appendChild(this.createCheckbox(isItChecked));
 				todoLi.appendChild(this.checkboxFA1());
 				todoLi.appendChild(this.checkboxFA2());
@@ -245,6 +251,7 @@ var view = {
 	  	setTimeout(function(){
 	    editTextInput.style.cssText = 'height:auto; padding:0';
 	    editTextInput.style.cssText = 'height:' + editTextInput.scrollHeight + 'px';
+
 	  },0);
 		return editTextInput;
 	},
@@ -291,6 +298,7 @@ var view = {
 			if(elementClicked.className === 'far fa-edit'){
 
 				console.log(event);
+				view.displayLists();
 				view.displayTodos();
 				var todoLi = document.getElementById(elementClicked.parentNode.id);
 				todoLi.textContent = "";
@@ -311,6 +319,7 @@ var view = {
 			}
 			if(elementClicked.className === 'liClass'){
 				view.displayTodos();
+				view.displayLists();
 				var todoLi = document.getElementById(elementClicked.id);
 				todoLi.textContent = "";
 				todoLi.appendChild(view.createEditTextInputTodo(parseInt(elementClicked.id)));
@@ -373,6 +382,7 @@ var view = {
 				view.displayTodos();
 			}
 			if(elementClicked.className === 'far fa-edit'){
+				view.displayTodos();
 				view.displayLists();
 				var listsLi = document.getElementById(elementClicked.parentNode.id);
 				var theId = elementClicked.parentNode.id.replace( /^\D+/g, '');
