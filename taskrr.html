@@ -2,20 +2,24 @@
 <html>
 	<head>
 		<title>taskrr</title>	
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 		<link rel="stylesheet" href="css/style.css" />
 		<link rel="icon" type="image/ico" href="images/favico.ico"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	</head>
 	<body>
-		<div class="container">
-			<section id="sidebar">
+		<section id="sidebar">
 				<a href="#" id="logo">taskrr</a>
-			</section>
-
+		</section>
+		<div class="container">
 			<section id="taskrr">
 				<input type="text" id="addTodoText" placeholder="Add a task ...">
+				<select id="priority">
+					<option value="none"></option>
+					<option value="high">High priority</option>
+					<option value="medium">Medium priority</option>
+					<option value="low">Low priority</option>
+				</select>
 				<i class="fas fa-plus" onclick="handlers.addTodo()"></i>
 				<ul id="notcompleted" class="todoUl"></ul>
 				<ul id="completed" class="todoUl"></ul>
