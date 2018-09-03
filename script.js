@@ -1,5 +1,7 @@
 var listIndex = 0;
 
+var priorityCheckbox = false;
+
 var todoList = {
 	todos: [],
 	lists: [],
@@ -68,18 +70,25 @@ var handlers = {
 		view.displayTodos();
 	},
 	addTodo: function(index = listIndex){
+
 		var addTodoText = document.getElementById("addTodoText");
 		var priority = document.getElementById('priority');
 		if(addTodoText.value != ""){
 			if(todoList.lists.length === 0){
 				todoList.addList("New list");
 				todoList.addTodoToList(addTodoText.value, priority.options[priority.selectedIndex].value, 0);
+				if(priorityCheckbox == true) {
+					handlers.sortByPriority();
+				}
 				addTodoText.value = "";
 				addTodoText.focus();
 				view.displayLists();
 			}
 			else{
 				todoList.addTodoToList(addTodoText.value, priority.options[priority.selectedIndex].value, index);
+				if(priorityCheckbox == true) {
+					handlers.sortByPriority();
+				}
 				addTodoText.value = "";
 				addTodoText.focus();
 			}
@@ -116,6 +125,11 @@ var handlers = {
 	removeList: function(position){
 		todoList.removeList(position);
 		view.displayLists();
+	},
+	sortByPriority: function() {
+	todoList.lists[listIndex].todos.sort(function(a,b){return b.tag - a.tag});
+	saveListsToLocal();
+	view.displayTodos();
 	}
 };
 
@@ -158,13 +172,13 @@ var view = {
 				// todoLi.textContent =  todo.todoText;
 				todoLi.className = liClass;
 
-				if(todo.tag === 'high'){
+				if(todo.tag === '3'){
 					todoLi.classList.toggle('highPriority');
-				} else if(todo.tag === 'medium'){
+				} else if(todo.tag === '2'){
 					todoLi.classList.toggle('mediumPriority');
-				} else if(todo.tag === 'low'){
+				} else if(todo.tag === '1'){
 					todoLi.classList.toggle('lowPriority');
-				} else if(todo.tag === 'none'){
+				} else if(todo.tag === '0'){
 					todoLi.classList.toggle('noPriority');
 				}
 
@@ -271,7 +285,20 @@ var view = {
 		var listsUl = document.getElementsByClassName('listsUl');
 		var input = document.getElementById('addTodoText');
 		var inputAddList = document.getElementById('addListText');
-		
+		var sortByPriority = document.getElementById('sort');
+		var priorityCheckboxElement = document.getElementById('priorityCheckbox');
+
+		priorityCheckboxElement.addEventListener('click', function() {
+			if(priorityCheckboxElement.checked) {
+				priorityCheckbox = true;
+				handlers.sortByPriority();
+				savePriorityCheckbox();
+			} else {
+				priorityCheckbox = false;
+				savePriorityCheckbox();
+			}
+		})
+
 		function autosize(){
 		  var el = this;
 		  setTimeout(function(){
@@ -284,7 +311,6 @@ var view = {
 		
 		function todoUl(){
 			var elementClicked = event.target;
-
 			
 			if(elementClicked.className === 'noTasks'){
 				input.focus();
@@ -471,6 +497,11 @@ function saveListIndex(){
 	localStorage.setItem("listIndex", str);
 }
 
+function savePriorityCheckbox(){
+	var str = JSON.stringify(priorityCheckbox);
+	localStorage.setItem("priorityCheckbox", str);
+}
+
 function saveListsToLocal(){
 	var str = JSON.stringify(todoList.lists);
 	localStorage.setItem("lists", str);
@@ -501,8 +532,14 @@ function getListIndex(){
 	}
 }
 
+function getPriorityCheckbox(){
+	var str = localStorage.getItem("priorityCheckbox");
+	priorityCheckbox = JSON.parse(str);
+}
+
 getTodosFromLocal();
 getListsFromLocal();
 getListIndex();
+getPriorityCheckbox();
 view.displayTodos();
 view.displayLists();
