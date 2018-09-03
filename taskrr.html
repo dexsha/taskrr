@@ -15,14 +15,17 @@
 			<section id="taskrr">
 				<input type="text" id="addTodoText" placeholder="Add a task ...">
 				<select id="priority">
-					<option value="none"></option>
-					<option value="high">High priority</option>
-					<option value="medium">Medium priority</option>
-					<option value="low">Low priority</option>
+					<option value="0">Priority</option>
+					<option value="1">Low</option>
+					<option value="2">Medium</option>
+					<option value="3">High</option>
 				</select>
-				<i class="fas fa-plus" onclick="handlers.addTodo()"></i>
+				<i class="fas fa-plus" onclick="handlers.addTodo()"></i><br />
+				<label for="prioritycheckbox">Sort by Priority</label>
+					<input type="checkbox" id="priorityCheckbox">
 				<ul id="notcompleted" class="todoUl"></ul>
 				<ul id="completed" class="todoUl"></ul>
+
 			</section>
 
 			<section id="lists">
@@ -33,5 +36,23 @@
 		</div>
 
 		<script src="script.js"></script> 
+<!-- 		<script src="Sortable.min.js"></script>
+		<script>
+			var list = document.getElementById("notcompleted");
+			Sortable.create(list, {
+				group: 'localStorage',
+				store: {
+			      get: function (sortable) {
+			        var order = localStorage.getItem(sortable.options.group);
+			        return order ? order.split('|') : [];
+			      },
+			      set: function (sortable) {
+			        var order = sortable.toArray();
+			        localStorage.setItem(sortable.options.group, order.join('|'));
+			      }
+			    }    
+			  });
+
+		</script> -->
 	</body>
 </html>
